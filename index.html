@@ -5,11 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <title>HP CONS – Accounting Workspace</title>
-    <script type="module" crossorigin src="./assets/index-DIpxsHow.js"></script>
+    <script type="module" crossorigin src="./assets/index-DttNtMw2.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-COiEfhsA.js">
     <link rel="stylesheet" crossorigin href="./assets/index-BkmQoA3i.css">
   </head>
   <body>
     <div id="root"></div>
+    <div id="boot-error" hidden style="font-family:system-ui,sans-serif;max-width:560px;margin:48px auto;padding:24px;line-height:1.6">
+      <h2 style="margin-top:0">Không mở được ứng dụng trên trình duyệt này</h2>
+      <p>Vui lòng mở bằng <b>Chrome</b>, <b>Edge</b> hoặc <b>Safari bản mới</b> (cập nhật iOS), không mở trong trình duyệt của Zalo/Facebook. Nếu vẫn lỗi, chụp màn hình này gửi bộ phận hỗ trợ.</p>
+      <pre id="boot-error-detail" style="white-space:pre-wrap;font-size:12px;opacity:.7"></pre>
+    </div>
+    <script>
+      // Báo lỗi dễ hiểu khi trình duyệt không chạy được ứng dụng (thay cho màn hình trắng)
+      (function () {
+        var errs = [];
+        window.addEventListener('error', function (e) { errs.push((e.message || 'Lỗi') + (e.filename ? ' @ ' + e.filename.split('/').pop() : '')); }, true);
+        function check(force) {
+          var root = document.getElementById('root');
+          if (root && !root.children.length && (force || errs.length)) {
+            document.getElementById('boot-error').hidden = false;
+            document.getElementById('boot-error-detail').textContent = navigator.userAgent + (errs.length ? '\n' + errs.join('\n') : '');
+          }
+        }
+        // Có lỗi thì báo sau 8 giây; mạng chậm (chưa tải xong) thì chờ tới 60 giây
+        setTimeout(function () { check(false); }, 8000);
+        setTimeout(function () { check(true); }, 60000);
+      })();
+    </script>
   </body>
 </html>
